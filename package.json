@@ -9,7 +9,8 @@
     "serve": "vite preview",
     "daily-login": "ts-node --esm -r dotenv/config src/scripts/dailyLogin.ts",
     "testChrome-login": "ts-node --project tsconfig.cjs.json src/scripts/testChrome.ts",
-    "schedule-login": "node -e \"require('child_process').exec('npm run daily-login')\""
+    "schedule-login": "node -e \"require('child_process').exec('npm run daily-login')\"",
+    "postinstall": "chmod +x ./node_modules/.bin/ts-node"
   },
   "dependencies": {
     "bootstrap": "^5.3.6",

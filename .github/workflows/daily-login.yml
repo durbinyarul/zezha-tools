@@ -23,4 +23,8 @@ jobs:
 
       - run: npm install
 
+      # Ensure ts-node is executable
+      - run: chmod +x ./node_modules/.bin/ts-node
+
+      # Now run your TS file directly
       - run: npx ts-node --esm -r dotenv/config src/scripts/dailyLogin.ts
