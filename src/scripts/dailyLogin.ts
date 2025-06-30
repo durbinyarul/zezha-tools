@@ -1,6 +1,7 @@
 import { Builder, By, until, WebDriver } from 'selenium-webdriver';
 import * as chrome from 'selenium-webdriver/chrome.js';
 import chromedriver from 'chromedriver';
+import { maybeDelayForSchedule } from "./scheduler";
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
@@ -127,6 +128,7 @@ async function dailyLoginAutomation(): Promise<void> {
 
 (async () => {
     try {
+        await maybeDelayForSchedule();
         await dailyLoginAutomation();
     } catch (e) {
         console.error('Fatal error during automation:', e);

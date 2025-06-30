@@ -3,7 +3,7 @@ name: Daily Login Automation
 on:
   workflow_dispatch:
   schedule:
-    - cron: "10 4 * * *" # 9:40 AM IST
+   - cron: "0 4 * * 1-5" # 9:30 AM IST, Monday to Friday
 
 jobs:
   run-automation:
@@ -51,6 +51,8 @@ jobs:
       - run: rm -rf node_modules package-lock.json
 
       - run: npm install
+
+      - run: npm install moment-timezone
 
       - run: chmod +x ./node_modules/.bin/tsx
 
