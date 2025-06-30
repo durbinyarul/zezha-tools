@@ -3,7 +3,7 @@ name: Daily Login Automation
 on:
   workflow_dispatch:
   schedule:
-    - cron: "10 4 * * *" # 9:40 AM IST
+    - cron: "10 4 * * *"
 
 jobs:
   run-automation:
@@ -23,6 +23,6 @@ jobs:
 
       - run: npm install
 
-      - run: chmod +x ./node_modules/.bin/ts-node
+      - run: chmod +x ./node_modules/.bin/ts-node-esm
 
-      - run: npx ts-node -r dotenv/config src/scripts/dailyLogin.ts
+      - run: npx ts-node-esm -r dotenv/config src/scripts/dailyLogin.ts
