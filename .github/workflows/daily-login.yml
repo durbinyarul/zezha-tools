@@ -8,7 +8,6 @@ on:
 jobs:
   run-automation:
     runs-on: ubuntu-latest
-
     env:
       VITE_GREYTHR_URL: ${{ secrets.VITE_GREYTHR_URL }}
       VITE_GREYTHR_USERNAME: ${{ secrets.VITE_GREYTHR_USERNAME }}
@@ -23,4 +22,5 @@ jobs:
 
       - run: npm install
 
-      - run: node src/scripts/dailyLogin.js
+      # Run your TypeScript script with ts-node esm loader
+      - run: node --loader ts-node/esm -r dotenv/config src/scripts/dailyLogin.ts
