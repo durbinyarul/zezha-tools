@@ -23,4 +23,4 @@ jobs:
 
       - run: npm install
 
-      - run: npx ts-node-esm -r dotenv/config src/scripts/dailyLogin.ts
+      - run: npx ts-node --esm -r dotenv/config src/scripts/dailyLogin.ts
