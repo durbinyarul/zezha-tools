@@ -23,4 +23,6 @@ jobs:
 
       - run: npm install
 
+      - run: chmod +x ./node_modules/.bin/ts-node
+
       - run: npx ts-node -r dotenv/config src/scripts/dailyLogin.ts
