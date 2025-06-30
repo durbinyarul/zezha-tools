@@ -15,16 +15,12 @@ jobs:
       VITE_GREYTHR_PASSWORD: ${{ secrets.VITE_GREYTHR_PASSWORD }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: npm install
+      - run: npm install
 
-      - name: Run Daily Login Automation
-        run: npx ts-node -r dotenv/config src/scripts/dailyLogin.ts
+      - run: npm run daily-login
