@@ -23,4 +23,8 @@ jobs:
 
       - run: npm install
 
+      # Fix Linux permissions if needed
+      - run: chmod +x ./node_modules/.bin/tsx
+
+      # Now run your TypeScript file
       - run: npx tsx -r dotenv/config src/scripts/dailyLogin.ts
