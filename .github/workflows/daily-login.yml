@@ -1,0 +1,30 @@
+name: Daily Login Automation
+
+on:
+  workflow_dispatch:         # Allows manual run
+  schedule:
+    - cron: "10 4 * * *"     # Runs every day at 9:40 AM IST
+
+jobs:
+  run-automation:
+    runs-on: ubuntu-latest
+
+    env:
+      VITE_GREYTHR_URL: ${{ secrets.VITE_GREYTHR_URL }}
+      VITE_GREYTHR_USERNAME: ${{ secrets.VITE_GREYTHR_USERNAME }}
+      VITE_GREYTHR_PASSWORD: ${{ secrets.VITE_GREYTHR_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Daily Login Automation
+        run: npx ts-node src/scripts/dailyLogin.ts
