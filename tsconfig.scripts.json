@@ -1,0 +1,14 @@
+{
+    "extends": "./tsconfig.node.json",
+    "compilerOptions": {
+      "module": "ESNext",            // emit real ESM import/exports
+      "target": "ES2022",
+      "moduleResolution": "node",
+      "esModuleInterop": true,       // allow default imports from CJS
+      "allowSyntheticDefaultImports": true,
+      "resolveJsonModule": true,
+      "noEmit": true                 // ts-node will compile in-memory
+    },
+    "include": ["src/scripts/**/*.ts"]
+  }
+  

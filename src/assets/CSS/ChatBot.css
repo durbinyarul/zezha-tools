@@ -1,0 +1,44 @@
+.chatcard {
+    zoom: 91%;
+    width: 61em;
+    padding: 10px 12px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: #f0f8ff;
+    transition: transform 0.2s;
+}
+
+.chat-box {
+    height: 400px;
+    overflow-y: auto;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  .chat-box .user {
+    text-align: right;
+  }
+  
+  .chat-box .assistant {
+    text-align: left;
+  }
+  
+  .chat-box .bubble {
+    display: inline-block;
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    white-space: pre-wrap;
+  }
+  
+  .chat-box .user .bubble {
+    background-color: #00b96b;
+    color: white;
+  }
+  
+  .chat-box .assistant .bubble {
+    background-color: #6c757d;
+    color: white;
+  }
+  

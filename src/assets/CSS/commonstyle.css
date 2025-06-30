@@ -1,0 +1,267 @@
+/* Fixed common pages styles */
+
+     body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        margin: 0;
+        background-color: #dce1e7;
+    } 
+   
+
+    h2 {
+        color: #343a40;
+        margin-bottom: 7px;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    } 
+
+    .card {
+        zoom: 90%;
+        width: 450px;
+        padding: 10px 12px; 
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        background-color: #f0f8ff;
+        transition: transform 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .emi-calc {
+        border: 2px solid #007bff;
+        background-color: #f0f8ff;
+    }
+
+    .new-regime {
+        border: 2px solid #28a745;
+        background-color: #f8f9fa;
+    }
+
+    label {
+        display: block;
+        font-size: 14px;
+        margin: 6px 0 4px;
+        color: #000000;
+    }
+
+    input {
+        width: calc(100% - 20px);
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 14px;
+        padding: 8px;
+        margin-bottom: 10px;
+    }
+
+    input:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #28a745;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+    .mt-4 {
+        margin-top: 0.5rem 8px !important;
+    }
+
+    .results {
+        margin-top: 0px;
+        padding: 5px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    .results h3 {
+        margin-bottom: 2px;
+        font-size: 18px;
+        color: #2c3e50;
+        text-align: center;
+    }
+
+    .result-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 6px;
+        border: 1px solid #eee;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .result-item span {
+        font-weight: bold;
+        color: #28a745;
+    }
+
+
+
+    /* Mobile responsive design */
+@media (max-width: 768px) {
+    .sidebar-header-fixed {
+      width: 100%;
+      height: 56px;
+      padding: 12px;
+    }
+  
+    .sidebar {
+      width: 100%;
+      top: 56px;
+      height: calc(100vh - 56px);
+      padding: 12px;
+      border-right: none;
+      border-top: 1px solid #e0e0e0;
+    }
+  
+    .sidebar.closed {
+      transform: translateX(-100%);
+    }
+
+  
+    .container {
+      flex-direction: column;
+      align-items: center;
+      padding: 0 10px;
+    }
+  
+    .card {
+       /* width: 100%;  */
+      /* max-width: 100%; */
+      max-width: 400px;
+      margin: 26px auto auto;
+      padding: 10px;
+    }
+  
+    input,
+    button {
+      width: 100%;
+      font-size: 14px;
+    }
+  
+    .submenu-item {
+      min-width: unset;
+      width: 100%;
+      text-align: center;
+      font-size: 13px;
+    }
+  
+    .brand-name-uniq {
+      font-size: 10px;
+      padding: 0.4em 0.8em;
+      letter-spacing: 1px;
+    }
+  
+    .profile-popup {
+      right: 10px;
+      width: 90%;
+      max-width: 220px;
+    }
+  
+    .profile-menu-option {
+      font-size: 13px;
+      padding: 6px 8px;
+    }
+  
+    .menu-item {
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+  
+    h2 {
+      font-size: 20px;
+    }
+  
+    .results h3 {
+      font-size: 16px;
+    }
+  
+    .result-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    body {
+        
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        margin: -10px;
+        background-color: #dce1e7;
+    }
+  }
+  
+  #root {
+    max-width: 1262px;
+    margin: 30px auto;
+    padding: 0rem;
+    text-align: center;
+
+}
+
+
+.dashboard-wrapper {
+  display: flex;
+  height: 100vh;
+  background-color: #f4f6f8;
+}
+
+/* .main-content {
+  margin-left: 0 !important;
+  padding: 12px;
+}
+
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+} */
+
+.dashboard-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.welcome-section {
+  margin-bottom: 2rem;
+}
+
+.welcome-section h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.intro-text {
+  font-size: 1rem;
+  color: #555;
+}
+
+.tool-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
