@@ -21,10 +21,38 @@ jobs:
         with:
           node-version: 20
 
+      # Install Chrome and required libs
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            wget \
+            ca-certificates \
+            fonts-liberation \
+            libappindicator3-1 \
+            libasound2 \
+            libatk-bridge2.0-0 \
+            libatk1.0-0 \
+            libcups2 \
+            libdbus-1-3 \
+            libgdk-pixbuf2.0-0 \
+            libnspr4 \
+            libnss3 \
+            libx11-xcb1 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxrandr2 \
+            xdg-utils \
+            libgbm1 \
+            libgtk-3-0
+
+          # Install Google Chrome
+          wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -fy install
+
+      - run: rm -rf node_modules package-lock.json
       - run: npm install
 
-      # Fix Linux permissions if needed
       - run: chmod +x ./node_modules/.bin/tsx
 
-      # Now run your TypeScript file
       - run: npx tsx -r dotenv/config src/scripts/dailyLogin.ts
