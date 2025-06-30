@@ -22,10 +22,11 @@ async function dailyLoginAutomation(): Promise<void> {
     //     .addArguments(`--user-data-dir=${tmpProfileDir}`);
 
 
-        const chromeOptions = new chrome.Options()
+    const chromeOptions = new chrome.Options()
     .addArguments('--headless=new')
     .addArguments('--no-sandbox')
     .addArguments('--disable-dev-shm-usage')
+    .addArguments('--window-size=1920,1080')
     .addArguments(`--user-data-dir=${tmpProfileDir}`);
 
     const serviceBuilder = new chrome.ServiceBuilder(chromedriver.path);
@@ -50,20 +51,31 @@ async function dailyLoginAutomation(): Promise<void> {
         }
 
         await driver.get(loginurl);
-
         const usernameInput = await driver.wait(
             until.elementLocated(By.id('username')), 10000
         );
+        await driver.wait(
+            until.elementIsVisible(usernameInput),
+            5000
+        );
         await usernameInput.sendKeys(username);
-
+        
         const passwordInput = await driver.wait(
             until.elementLocated(By.id('password')), 10000
         );
+        await driver.wait(
+            until.elementIsVisible(passwordInput),
+            5000
+        );
         await passwordInput.sendKeys(password);
-
+        
         const loginButton = await driver.wait(
             until.elementLocated(By.css("button[type='submit']")),
             10000
+        );
+        await driver.wait(
+            until.elementIsVisible(loginButton),
+            5000
         );
         await loginButton.click();
 
