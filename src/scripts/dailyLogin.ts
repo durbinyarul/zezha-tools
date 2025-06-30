@@ -3,6 +3,8 @@ import * as chrome from 'selenium-webdriver/chrome.js';
 import chromedriver from 'chromedriver';
 import dotenv from 'dotenv';
 import fs from 'fs';
+import path from 'path';
+import os from 'os';
 
 dotenv.config();
 
@@ -10,7 +12,21 @@ console.log("🚀 Starting dailyLoginAutomation...");
 console.log("Username from .env:", process.env.VITE_GREYTHR_USERNAME);
 
 async function dailyLoginAutomation(): Promise<void> {
-    const chromeOptions = new chrome.Options().addArguments('--start-maximized');
+    // Generate unique temp dir for Chrome profile
+    const tmpProfileDir = fs.mkdtempSync(
+        path.join(os.tmpdir(), 'chrome-profile-')
+    );
+
+    // const chromeOptions = new chrome.Options()
+    //     .addArguments('--start-maximized')
+    //     .addArguments(`--user-data-dir=${tmpProfileDir}`);
+
+
+        const chromeOptions = new chrome.Options()
+    .addArguments('--headless=new')
+    .addArguments('--no-sandbox')
+    .addArguments('--disable-dev-shm-usage')
+    .addArguments(`--user-data-dir=${tmpProfileDir}`);
 
     const serviceBuilder = new chrome.ServiceBuilder(chromedriver.path);
 
@@ -93,6 +109,7 @@ async function dailyLoginAutomation(): Promise<void> {
         throw error;
     } finally {
         await driver.quit();
+        console.log("✅ Driver quit.");
     }
 }
 
