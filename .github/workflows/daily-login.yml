@@ -3,9 +3,9 @@ name: Daily Login Automation
 on:
   workflow_dispatch: {}
   schedule:
-    # - cron: "55 3 * * 1-5" # 9:25 AM IST, Monday to Friday
+     - cron: "55 3 * * 1-5" # 9:25 AM IST, Monday to Friday
 
-     - cron: "*/5 * * * *" # runs every 5 minutes
+    # - cron: "*/5 * * * *" # runs every 5 minutes
 
 jobs:
   run-automation:
