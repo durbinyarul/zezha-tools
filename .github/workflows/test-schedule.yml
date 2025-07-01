@@ -1,9 +1,9 @@
 name: Test Schedule
 
 on:
-  workflow_dispatch: {}
   schedule:
     - cron: "*/5 * * * *"  # every 5 minutes
+  workflow_dispatch: {}
 
 jobs:
   test:
@@ -15,3 +15,5 @@ jobs:
           echo "Current UTC time: $(date -u)"
           echo "Repository: $GITHUB_REPOSITORY"
           echo "GitHub Run ID: $GITHUB_RUN_ID"
+
+# Force redeploy to register schedule
