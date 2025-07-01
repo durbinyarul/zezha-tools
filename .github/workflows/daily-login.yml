@@ -1,7 +1,7 @@
 name: Daily Login Automation
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   schedule:
     # - cron: "55 3 * * 1-5" # 9:25 AM IST, Monday to Friday
 
