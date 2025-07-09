@@ -16,6 +16,7 @@
     "bootstrap": "^5.3.6",
     "chromedriver": "^138.0.0",
     "dotenv": "^16.5.0",
+    "googleapis": "^152.0.0",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.3",
     "jspdf": "^3.0.1",

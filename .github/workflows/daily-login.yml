@@ -57,6 +57,8 @@ jobs:
 
       - run: npm install
 
+      - run: npm list googleapis
+
       - run: chmod +x ./node_modules/.bin/tsx
 
       - name: Write Gmail token.json
