@@ -117,6 +117,14 @@ async function dailyLoginAutomation(): Promise<void> {
             body: `GreyHR automation ran successfully at `+ indiaTime,
           });
     } catch (error) {
+
+        await sendGmail({
+            to: process.env.VITE_TO_MAIL!,
+            subject: "Daily Login Not Done",
+            body: `GreyHR automation ran Failed at `+ indiaTime,
+          });
+
+
         const message = error instanceof Error ? error.message : String(error);
         console.error(`❌ Automation failed: ${message}`);
 
