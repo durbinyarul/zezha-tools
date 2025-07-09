@@ -6,9 +6,11 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import { sendGmail } from "./gmailSender";
+import moment from "moment-timezone";
 
 dotenv.config();
-
+const indiaTime = moment().tz("Asia/Kolkata").format("YYYY-MM-DD HH:mm:ss");
 console.log("🚀 Starting dailyLoginAutomation...");
 console.log("Username from .env:", process.env.VITE_GREYTHR_USERNAME);
 
@@ -46,8 +48,9 @@ async function dailyLoginAutomation(): Promise<void> {
         const loginurl = process.env.VITE_GREYTHR_URL;
         const username = process.env.VITE_GREYTHR_USERNAME;
         const password = process.env.VITE_GREYTHR_PASSWORD;
+        const tomail = process.env.VITE_TO_MAIL;
 
-        if (!loginurl || !username || !password) {
+        if (!loginurl || !username || !password || !tomail) {
             throw new Error('Missing credentials in .env file');
         }
 
@@ -107,7 +110,12 @@ async function dailyLoginAutomation(): Promise<void> {
 
         console.log("✅ Sign In clicked successfully");
         await driver.sleep(5000);
-        console.log('✅ Successfully logged in and clicked Sign In at', new Date().toISOString());
+        console.log('✅ Successfully logged in and clicked Sign In at ', indiaTime);
+        await sendGmail({
+            to: tomail,
+            subject: "Daily Login Done",
+            body: `GreyHR automation ran successfully at `+ indiaTime,
+          });
     } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         console.error(`❌ Automation failed: ${message}`);
