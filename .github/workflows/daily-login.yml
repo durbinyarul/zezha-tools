@@ -1,15 +1,12 @@
 name: Daily Login Automation
-
 on:
   workflow_dispatch: {}
   schedule:
      - cron: "0 10 31 12 *" # 9:25 AM IST, Monday to Friday
 
-
 jobs:
   run-automation:
     runs-on: ubuntu-latest
-
     env:
       VITE_GREYTHR_URL: ${{ secrets.VITE_GREYTHR_URL }}
       VITE_GREYTHR_USERNAME: ${{ secrets.VITE_GREYTHR_USERNAME }}
@@ -18,14 +15,12 @@ jobs:
       VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
       VITE_GOOGLE_CLIENT_SECRET: ${{ secrets.VITE_GOOGLE_CLIENT_SECRET }}
       VITE_GOOGLE_REDIRECT_URI: ${{ secrets.VITE_GOOGLE_REDIRECT_URI }}
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
+          
       - name: Install Chrome and dependencies
         run: |
           sudo apt-get update
@@ -49,19 +44,25 @@ jobs:
             libgbm1 \
             libgtk-3-0 \
             libasound2t64
-
           wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -fy install
-
+          
+      - name: Get Chrome version
+        id: chrome-version
+        run: echo "CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1)" >> $GITHUB_ENV
+        
+      - name: Install matching ChromeDriver
+        run: |
+          CHROME_MAJOR_VERSION=${{ env.CHROME_VERSION }}
+          echo "Installing ChromeDriver for Chrome version $CHROME_MAJOR_VERSION"
+          npm install chromedriver@${CHROME_MAJOR_VERSION}
+          
       - run: rm -rf node_modules package-lock.json
-
       - run: npm install
-
       - run: npm list googleapis
-
       - run: chmod +x ./node_modules/.bin/tsx
-
+      
       - name: Write Gmail token.json
         run: echo '${{ secrets.VITE_GMAIL_TOKEN_JSON }}' > token.json
-
+        
       - run: npx tsx -r dotenv/config src/scripts/dailyLogin.ts
