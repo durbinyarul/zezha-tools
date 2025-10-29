@@ -53,9 +53,20 @@ jobs:
         
       - name: Install matching ChromeDriver
         run: |
-          CHROME_MAJOR_VERSION=${{ env.CHROME_VERSION }}
-          echo "Installing ChromeDriver for Chrome version $CHROME_MAJOR_VERSION"
-          npm install chromedriver@${CHROME_MAJOR_VERSION}
+           CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
+           CHROME_MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d. -f1)
+           echo "Detected Chrome major version: $CHROME_MAJOR_VERSION"
+    
+            CHROMEDRIVER_VERSION=$(curl -s https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json \
+             | jq -r ".versions[] | select(.version | startswith(\"$CHROME_MAJOR_VERSION\")) | .version" | head -n 1)
+    
+            echo "Installing ChromeDriver version: $CHROMEDRIVER_VERSION"
+           wget -q "https://storage.googleapis.com/chrome-for-testing-public/${CHROMEDRIVER_VERSION}/linux64/chromedriver-linux64.zip"
+           unzip chromedriver-linux64.zip
+           sudo mv chromedriver-linux64/chromedriver /usr/local/bin/
+           sudo chmod +x /usr/local/bin/chromedriver
+
+    
           
       - run: rm -rf node_modules package-lock.json
       - run: npm install
