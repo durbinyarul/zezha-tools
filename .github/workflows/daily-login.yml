@@ -1,8 +1,9 @@
 name: Daily Login Automation
+
 on:
   workflow_dispatch: {}
   schedule:
-     - cron: "0 10 31 12 *" # 9:25 AM IST, Monday to Friday
+     - cron: "0 10 31 12 *" # 10:00 UTC ~ 3:30 PM IST
 
 jobs:
   run-automation:
@@ -15,82 +16,59 @@ jobs:
       VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
       VITE_GOOGLE_CLIENT_SECRET: ${{ secrets.VITE_GOOGLE_CLIENT_SECRET }}
       VITE_GOOGLE_REDIRECT_URI: ${{ secrets.VITE_GOOGLE_REDIRECT_URI }}
+      VITE_GMAIL_TOKEN_JSON: ${{ secrets.VITE_GMAIL_TOKEN_JSON }}
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          
+
       - name: Install Chrome and dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            wget \
-            ca-certificates \
-            fonts-liberation \
-            libappindicator3-1 \
-            libatk-bridge2.0-0 \
-            libatk1.0-0 \
-            libcups2 \
-            libdbus-1-3 \
-            libgdk-pixbuf2.0-0 \
-            libnspr4 \
-            libnss3 \
-            libx11-xcb1 \
-            libxcomposite1 \
-            libxdamage1 \
-            libxrandr2 \
-            xdg-utils \
-            libgbm1 \
-            libgtk-3-0 \
-            libasound2t64
+            wget ca-certificates fonts-liberation \
+            libappindicator3-1 libatk-bridge2.0-0 libatk1.0-0 libcups2 \
+            libdbus-1-3 libgdk-pixbuf2.0-0 libnspr4 libnss3 libx11-xcb1 \
+            libxcomposite1 libxdamage1 libxrandr2 xdg-utils libgbm1 libgtk-3-0 \
+            libasound2t64 unzip jq
           wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -fy install
-          
+
       - name: Get Chrome version
         id: chrome-version
         run: echo "CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1)" >> $GITHUB_ENV
 
+      - name: Remove old ChromeDriver
+        run: |
+          npm uninstall chromedriver || true
+          rm -rf node_modules/chromedriver
+          sudo rm -f /usr/bin/chromedriver
+          sudo rm -f /usr/local/bin/chromedriver
 
-        - name: Remove old ChromeDriver
-      run: |
-    npm uninstall chromedriver || true
-    rm -rf node_modules/chromedriver
-    sudo rm -f /usr/bin/chromedriver
-    sudo rm -f /usr/local/bin/chromedriver
-        
       - name: Install matching ChromeDriver
         run: |
-         CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
           CHROME_MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d. -f1)
           echo "Detected Chrome major version: $CHROME_MAJOR_VERSION"
 
-          # Find matching ChromeDriver version from official JSON
           CHROMEDRIVER_VERSION=$(curl -s https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json \
             | jq -r ".versions[] | select(.version | startswith(\"$CHROME_MAJOR_VERSION\")) | .version" | head -n 1)
 
-          echo "Installing ChromeDriver version: $CHROMEDRIVER_VERSION"
           wget -q "https://storage.googleapis.com/chrome-for-testing-public/${CHROMEDRIVER_VERSION}/linux64/chromedriver-linux64.zip"
           unzip -q chromedriver-linux64.zip
-
-          # Remove old chromedriver from PATH if exists
-          sudo rm -f /usr/bin/chromedriver || true
-          sudo rm -f /usr/local/bin/chromedriver || true
-
-          # Move new driver into place
           sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
-
           echo "✅ ChromeDriver $(/usr/local/bin/chromedriver --version)"
 
-    
-          
       - run: rm -rf node_modules package-lock.json
       - run: npm install
-      - run: npm list googleapis
       - run: chmod +x ./node_modules/.bin/tsx
-      
+
       - name: Write Gmail token.json
         run: echo '${{ secrets.VITE_GMAIL_TOKEN_JSON }}' > token.json
-        
-      - run: npx tsx -r dotenv/config src/scripts/dailyLogin.ts
+
+      - name: Run dailyLogin automation
+        run: npx tsx -r dotenv/config src/scripts/dailyLogin.ts
