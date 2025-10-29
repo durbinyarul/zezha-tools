@@ -1,6 +1,5 @@
 import { Builder, By, until, WebDriver } from 'selenium-webdriver';
 import * as chrome from 'selenium-webdriver/chrome.js';
-import chromedriver from 'chromedriver';
 import { maybeDelayForSchedule } from "./scheduler";
 import dotenv from 'dotenv';
 import fs from 'fs';
@@ -15,24 +14,17 @@ console.log("🚀 Starting dailyLoginAutomation...");
 console.log("Username from .env:", process.env.VITE_GREYTHR_USERNAME);
 
 async function dailyLoginAutomation(): Promise<void> {
-    // Generate unique temp dir for Chrome profile
-    const tmpProfileDir = fs.mkdtempSync(
-        path.join(os.tmpdir(), 'chrome-profile-')
-    );
-
-    // const chromeOptions = new chrome.Options()
-    //     .addArguments('--start-maximized')
-    //     .addArguments(`--user-data-dir=${tmpProfileDir}`);
-
+    const tmpProfileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'chrome-profile-'));
 
     const chromeOptions = new chrome.Options()
-    .addArguments('--headless=new')
-    .addArguments('--no-sandbox')
-    .addArguments('--disable-dev-shm-usage')
-    .addArguments('--window-size=1920,1080')
-    .addArguments(`--user-data-dir=${tmpProfileDir}`);
+        .addArguments('--headless=new')
+        .addArguments('--no-sandbox')
+        .addArguments('--disable-dev-shm-usage')
+        .addArguments('--window-size=1920,1080')
+        .addArguments(`--user-data-dir=${tmpProfileDir}`);
 
-    const serviceBuilder = new chrome.ServiceBuilder(chromedriver.path);
+    // Force Selenium to use the manually installed ChromeDriver
+    const serviceBuilder = new chrome.ServiceBuilder('/usr/local/bin/chromedriver');
 
     console.log("🛠️ Building WebDriver...");
 
@@ -55,32 +47,16 @@ async function dailyLoginAutomation(): Promise<void> {
         }
 
         await driver.get(loginurl);
-        const usernameInput = await driver.wait(
-            until.elementLocated(By.id('username')), 10000
-        );
-        await driver.wait(
-            until.elementIsVisible(usernameInput),
-            5000
-        );
+        const usernameInput = await driver.wait(until.elementLocated(By.id('username')), 10000);
+        await driver.wait(until.elementIsVisible(usernameInput), 5000);
         await usernameInput.sendKeys(username);
         
-        const passwordInput = await driver.wait(
-            until.elementLocated(By.id('password')), 10000
-        );
-        await driver.wait(
-            until.elementIsVisible(passwordInput),
-            5000
-        );
+        const passwordInput = await driver.wait(until.elementLocated(By.id('password')), 10000);
+        await driver.wait(until.elementIsVisible(passwordInput), 5000);
         await passwordInput.sendKeys(password);
         
-        const loginButton = await driver.wait(
-            until.elementLocated(By.css("button[type='submit']")),
-            10000
-        );
-        await driver.wait(
-            until.elementIsVisible(loginButton),
-            5000
-        );
+        const loginButton = await driver.wait(until.elementLocated(By.css("button[type='submit']")), 10000);
+        await driver.wait(until.elementIsVisible(loginButton), 5000);
         await loginButton.click();
 
         await driver.wait(until.elementLocated(By.css('.btn-container')), 10000);
@@ -101,9 +77,7 @@ async function dailyLoginAutomation(): Promise<void> {
             }
         }
 
-        if (!dailyButton) {
-            dailyButton = gtButtons[0];
-        }
+        if (!dailyButton) dailyButton = gtButtons[0];
 
         await driver.executeScript("arguments[0].scrollIntoView(true);", dailyButton);
         await driver.executeScript("arguments[0].click();", dailyButton);
@@ -111,19 +85,19 @@ async function dailyLoginAutomation(): Promise<void> {
         console.log("✅ Sign In clicked successfully");
         await driver.sleep(5000);
         console.log('✅ Successfully logged in and clicked Sign In at ', indiaTime);
+
         await sendGmail({
             to: tomail,
             subject: "Daily Login Done",
             body: `GreyHR automation ran successfully at `+ indiaTime,
-          });
-    } catch (error) {
+        });
 
+    } catch (error) {
         await sendGmail({
             to: process.env.VITE_TO_MAIL!,
             subject: "Daily Login Not Done",
             body: `GreyHR automation ran Failed at `+ indiaTime,
-          });
-
+        });
 
         const message = error instanceof Error ? error.message : String(error);
         console.error(`❌ Automation failed: ${message}`);
