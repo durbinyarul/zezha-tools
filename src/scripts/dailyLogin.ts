@@ -23,7 +23,7 @@ async function dailyLoginAutomation(): Promise<void> {
         .addArguments('--window-size=1920,1080')
         .addArguments(`--user-data-dir=${tmpProfileDir}`);
 
-    // Force Selenium to use the manually installed ChromeDriver
+    // Use manually installed ChromeDriver
     const serviceBuilder = new chrome.ServiceBuilder('/usr/local/bin/chromedriver');
 
     console.log("🛠️ Building WebDriver...");
@@ -47,14 +47,15 @@ async function dailyLoginAutomation(): Promise<void> {
         }
 
         await driver.get(loginurl);
+
         const usernameInput = await driver.wait(until.elementLocated(By.id('username')), 10000);
         await driver.wait(until.elementIsVisible(usernameInput), 5000);
         await usernameInput.sendKeys(username);
-        
+
         const passwordInput = await driver.wait(until.elementLocated(By.id('password')), 10000);
         await driver.wait(until.elementIsVisible(passwordInput), 5000);
         await passwordInput.sendKeys(password);
-        
+
         const loginButton = await driver.wait(until.elementLocated(By.css("button[type='submit']")), 10000);
         await driver.wait(until.elementIsVisible(loginButton), 5000);
         await loginButton.click();
@@ -84,19 +85,19 @@ async function dailyLoginAutomation(): Promise<void> {
 
         console.log("✅ Sign In clicked successfully");
         await driver.sleep(5000);
-        console.log('✅ Successfully logged in and clicked Sign In at ', indiaTime);
+        console.log('✅ Successfully logged in at ', indiaTime);
 
         await sendGmail({
             to: tomail,
             subject: "Daily Login Done",
-            body: `GreyHR automation ran successfully at `+ indiaTime,
+            body: `GreyHR automation ran successfully at ` + indiaTime,
         });
 
     } catch (error) {
         await sendGmail({
             to: process.env.VITE_TO_MAIL!,
             subject: "Daily Login Not Done",
-            body: `GreyHR automation ran Failed at `+ indiaTime,
+            body: `GreyHR automation failed at ` + indiaTime,
         });
 
         const message = error instanceof Error ? error.message : String(error);
