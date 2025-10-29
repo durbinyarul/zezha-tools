@@ -50,6 +50,14 @@ jobs:
       - name: Get Chrome version
         id: chrome-version
         run: echo "CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1)" >> $GITHUB_ENV
+
+
+        - name: Remove old ChromeDriver
+      run: |
+    npm uninstall chromedriver || true
+    rm -rf node_modules/chromedriver
+    sudo rm -f /usr/bin/chromedriver
+    sudo rm -f /usr/local/bin/chromedriver
         
       - name: Install matching ChromeDriver
         run: |
